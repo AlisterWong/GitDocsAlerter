@@ -1,4 +1,3 @@
-from http.client import OK
 from discord_webhooks import DiscordWebhooks
 import urllib.request
 import requests
@@ -40,9 +39,6 @@ class message:
 
             # Triggers the payload to be sent to Discord.
             webhook.send()
-    
-    
-
 
 test_message = message("www", "README.md")
 test_message.send_message()
