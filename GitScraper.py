@@ -19,7 +19,7 @@ class message:
         # Initialize the webhook class and attaches data.
         webhook = DiscordWebhooks(WEBHOOK_URL)
         
-        url = "https://api.github.com/repos/AlisterWong/COMP30023_Project_2/contents/"
+        url = "https://api.github.com/repos/COMP30022-2022/COMP30022/contents/"
         url = url + self.folder + "/"
         url = url + self.file
 
@@ -28,32 +28,40 @@ class message:
         header = "application/vnd.github.raw"
         token = ftoken.read()
 
-        
         resp = requests.get(url, headers={"Accept": header, "Authorization": "token " + token})
         
-        #print(resp.text)
         if resp.ok:
-            # Sets some content for a basic message.
-            #webhook.set_content(content=resp.text)
-            
             # Appends a field
             webhook.add_field(name=self.file, value=resp.text)
 
             # Triggers the payload to be sent to Discord.
             webhook.send()
 
-test_message = message("www", "index.html")
 
 app = Flask(__name__)
 
+# Setting route to respond to POST requests
 @app.route('/webhook', methods=['POST'])
 def return_response():
-    print(request.json)
-    #json_file = json.loads(request.json)
-    #print("\n\n\n" + json_file)
-    #print(json_file["commits"]["id"])
-    #test_message.send_message()
-    return Response(status=200)
+    data = request.json
+    
+    commit_set = set()
 
+    # Goes through the commits and adds unique filenames to a set
+    for commit in data["commits"]:
+        for file in commit["added"]:
+            if file.endswith('.md'):
+                commit_set.add(file)
+        for file in commit["modified"]:
+            if file.endswith('.md'):
+                commit_set.add(file)
+
+    # Sends discord alert for each unique file in latest commit
+    for item in commit_set:
+        commit_message = message("Documentation", item)
+        commit_message.send_message()
+
+    # Return successful response
+    return Response(status=200)
 
 if __name__ == "__main__": app.run()
