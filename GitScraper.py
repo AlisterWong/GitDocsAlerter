@@ -7,12 +7,11 @@ import json
 fwebhook = open("webhook.txt", "r")
 
 # Webhook URL for your Discord channel.
-WEBHOOK_URL = fwebhook.read()
+WEBHOOK_URL = fwebhook.read().strip()
 
 class message:
 
-    def __init__(self, folder, file):
-        self.folder = folder
+    def __init__(self, file):
         self.file = file
         
     def send_message(self):
@@ -20,13 +19,12 @@ class message:
         webhook = DiscordWebhooks(WEBHOOK_URL)
         
         url = "https://api.github.com/repos/COMP30022-2022/COMP30022/contents/"
-        url = url + self.folder + "/"
         url = url + self.file
 
         ftoken = open("token.txt", "r")
         
         header = "application/vnd.github.raw"
-        token = ftoken.read()
+        token = ftoken.read().strip()
 
         resp = requests.get(url, headers={"Accept": header, "Authorization": "token " + token})
         
@@ -36,6 +34,8 @@ class message:
 
             # Triggers the payload to be sent to Discord.
             webhook.send()
+        else:
+            raise Exception("Github API failed: " + self.file)
 
 
 app = Flask(__name__)
@@ -58,10 +58,10 @@ def return_response():
 
     # Sends discord alert for each unique file in latest commit
     for item in commit_set:
-        commit_message = message("Documentation", item)
+        commit_message = message(item)
         commit_message.send_message()
 
     # Return successful response
     return Response(status=200)
 
-if __name__ == "__main__": app.run()
+if __name__ == "__main__": app.run(host='0.0.0.0', port=58372)
