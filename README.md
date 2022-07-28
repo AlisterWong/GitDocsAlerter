@@ -11,12 +11,13 @@ It then shows the contents of such '.md' files in discord whenever it is run by
 an alert from a GitHub webhook.
 
 ### How to use it?
-Create a webhook.txt file with your Discord webhook URL, choosing which channel to 
+1. Create a webhook.txt file with your Discord webhook URL, choosing which channel to 
 send it to.
 
-Create a token.txt file with your private Github token key. (Do not share this token)
+2. Create a token.txt file with your private Github token key. (Do not share this token)
 
-Remember to not share these two links.
+   Remember to not share these two links.
 
+3. Run this script on a server and have the GitHub webhook directed to this server.
 
-
+4. Enjoy the Discord alerts
