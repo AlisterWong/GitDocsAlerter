@@ -8,8 +8,8 @@ such files.
 """
 
 import requests
-from discord_webhooks import DiscordWebhooks
 from flask import Flask, request, Response
+from discord_webhooks import DiscordWebhooks
 
 __author__ = "Alister Wong"
 
