@@ -2,6 +2,8 @@
 ### Dependencies
 This program relies on the discord_webhooks module and Python Flask.
 
+https://github.com/JamesIves/discord-webhooks
+
 ### What does it do?
 This program sends alerts to Discord based on a Discord webhook URL.
 It uses verification via a private token on GitHub to check specific respositories
